@@ -1,0 +1,41 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  Products_v2.1_RegressionTest
+  build:
+    # The type of runner that the job will run on 
+   runs-on: [self-hosted, docker]
+    container: 
+      image: node:13
+      services: newman:4.5.1
+      env: $VERSION == "2.1" && $TEST_TYPE == "regression"
+              
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Runs a single command using the runners shell
+      - name: categories_Test
+        run: sudo newman run ProductsV2.1_Test/ProductsV2.1_Categories.postman_collection.json -e Environments/QA_Full_$ENV.postman_environment.json --insecure
+
+      # Runs a set of commands using the runners shell
+      - name: Run a multi-line script
+        run: |
+          echo Add other actions to build,
+          echo test, and deploy your project.
